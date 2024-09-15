@@ -1,0 +1,39 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+struct Student {
+    int rollNo;
+    char name[20];
+    float marks;
+};
+
+void main() {
+    struct Student *studentPtr;
+    FILE *fp = fopen("students.txt", "w");
+    if (fp == NULL) {
+        printf("Error opening file!\n");
+        return 1;
+    }
+    studentPtr = (struct Student *) malloc(sizeof(struct Student));
+    printf("Enter roll no: ");
+    scanf("%d", &(*studentPtr).rollNo);
+    printf("Enter name: ");
+    scanf("%s", (*studentPtr).name);
+    printf("Enter marks: ");
+    scanf("%f", &(*studentPtr).marks);
+    fwrite(studentPtr, sizeof(struct Student), 1, fp);
+    fclose(fp);
+    fp = fopen("students.txt", "r");
+    if (fp == NULL) {
+        printf("Error opening file!\n");
+        return 1;
+    }
+    fread(studentPtr, sizeof(struct Student), 1, fp);
+    printf("Roll no: %d\n", (*studentPtr).rollNo);
+    printf("Name: %s\n", (*studentPtr).name);
+    printf("Marks: %.2f\n", (*studentPtr).marks);
+    fclose(fp);
+    free(studentPtr);
+    return 0;
+}
